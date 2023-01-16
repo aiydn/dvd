@@ -223,7 +223,7 @@ function reset(log) {
   startTime = performance.now();
   logo.px = 0;
   future = logo;
-  requestAnimationFrame(calc);
+  if (willEverHit(logo.x, logo.y) == true) { type = "time"; requestAnimationFrame(calc);}
   console.log(log)
 }
 function setScreen() {
