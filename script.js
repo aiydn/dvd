@@ -42,17 +42,6 @@ async function wakeLock() {
   }
 }
 
-function getZeroZeroStart() {
-  console.log(lcm(max.x, max.y))
-  let x = 0;
-  let y = 0;
-  vx = 1,
-    vy = 1;
-  let px = 0;
-  let hit = 0;
-  return { x, y, vx, vy, px, hit };
-}
-
 function getGoodStart() {
   let x = getRndInteger(0, window.innerWidth - 256 - 1),
     y = getRndInteger(0, window.innerHeight - 147 - 1),
@@ -94,8 +83,8 @@ function getImg(srcW, srcH) {
 }
 
 function getDvd() {
-  let black = chromiumOrElse("./images/dvd_black.svg", "./images/dvd_black.png");
-  let white = chromiumOrElse("./images/dvd_white.svg", "./images/dvd_white.png");
+  let black = chromiumOrElse("/images/dvd_black.svg", "/images/dvd_black.png");
+  let white = chromiumOrElse("/images/dvd_white.svg", "/images/dvd_white.png");
   return { black, white }
 }
 
@@ -137,8 +126,7 @@ function lcm(a, b) {
 }
 
 function calc() {
-  // for (var i = 0; i < 5000; i++) {
-  if (willEverHit(max.x, max.y) == false) { console.log("error") }
+  if (willEverHit(logo.x, logo.y) == false) { type = "never"}
   else {
     while (typeof logPX[logo.hit + 1] == 'undefined') {
       future = nextWall(future.x, future.y, future.vx, future.vy, future.px, future.hit)
@@ -226,7 +214,6 @@ function fix() {
 function reset(log) {
   img = getImg(294, 150);
   max = getMax();
-  if (willEverHit(max.x, max.y)) { }
   screen = getScreen();
   speed = getSpeed(2)
   setScreen();
@@ -236,8 +223,7 @@ function reset(log) {
   startTime = performance.now();
   logo.px = 0;
   future = logo;
-  if (willEverHit(max.x, max.y)) { requestAnimationFrame(calc) }
-  else (alert("ERROR"));
+  requestAnimationFrame(calc);
   console.log(log)
 }
 function setScreen() {
