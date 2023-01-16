@@ -241,7 +241,7 @@ function stats() {
     else if (type == "pixels") { output = "The " + hit + " corner will be hit in " + px + " pixels" };
   }
   else if (type == "never") { output = "The corner will never be hit" }
-  else { let output = "" }
+  else { output = "" }
   if (output !== document.getElementById("stats").innerText) {document.getElementById("stats").innerText = output}
 }
 
