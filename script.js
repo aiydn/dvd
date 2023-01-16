@@ -233,14 +233,16 @@ function setScreen() {
 }
 
 function stats() {
+  let output;
   if (typeof logPX[logo.hit + 1] !== 'undefined') {
     let hit = logHit[logo.hit + 1];
     let px = logPX[logo.hit + 1] - logo.px;
-    if (type == "time") { document.getElementById("stats").innerText = "The " + hit + " corner will be hit at " + time(px) + "" }
-    else if (type == "pixels") { document.getElementById("stats").innerText = "The " + hit + " corner will be hit in " + px + " pixels" };
+    if (type == "time") { output =  "The " + hit + " corner will be hit at " + time(px) + "" }
+    else if (type == "pixels") { output = "The " + hit + " corner will be hit in " + px + " pixels" };
   }
-  else if (type == "never") { document.getElementById("stats").innerText = "The corner will never be hit" }
-  else { document.getElementById("stats").innerText = "" }
+  else if (type == "never") { output = "The corner will never be hit" }
+  else { let output = "" }
+  if (output !== document.getElementById("stats").innerText) {document.getElementById("stats").innerText = output}
 }
 
 function chromiumOrElse(chromium, orElse) {
