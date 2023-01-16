@@ -237,11 +237,11 @@ function stats() {
   if (typeof logPX[logo.hit + 1] !== 'undefined') {
     let hit = logHit[logo.hit + 1];
     let px = logPX[logo.hit + 1] - logo.px;
-    if (type == "time") { output =  "The " + hit + " corner will be hit at " + time(px) + "" }
+    if (type == "time") { output =  "The " + hit + " corner will be hit at " + time(px)}
     else if (type == "pixels") { output = "The " + hit + " corner will be hit in " + px + " pixels" };
   }
   else if (type == "never") { output = "The corner will never be hit" }
-  else { output = "" }
+  else { output = " " }
   if (output !== document.getElementById("stats").innerText) {document.getElementById("stats").innerText = output}
 }
 
