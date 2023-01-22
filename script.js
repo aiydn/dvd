@@ -143,7 +143,7 @@ function animate() {
     if (check(logo.y, "y")) { logo.vy = -logo.vy; logoColor = getColor(); recentHit = false };
     if (recentHit) { logoColor = getColor() };
     logo.px += 1;
-    if (whichCorner(logo.x, logo.y) !== undefined) { recentHit = true; logo.hit += 1; reset() };
+    if (whichCorner(logo.x, logo.y) !== undefined) { recentHit = true; reset() };
     stats();
   }
   draw()
