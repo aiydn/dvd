@@ -18,7 +18,7 @@ var screen = getScreen();
 var colorH = 0;
 var logoColor = getColor();
 var recentHit = false;
-var speed = getSpeed(2);
+var speed = getSpeed(1);
 var startTime = performance.now();
 var maxpx = (lcm(max.x, max.y));
 var corner = nextCorner(logo);
@@ -173,7 +173,7 @@ function reset() {
   img = getImg(294, 150);
   max = getMax();
   screen = getScreen();
-  speed = getSpeed(2)
+  speed = getSpeed(1)
   setScreen();
   fix();
   startTime = performance.now();
