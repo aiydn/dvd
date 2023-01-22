@@ -1,14 +1,6 @@
 window.onresize = function () { reset(); }
 var calc
-const gcd = (...arr) => {
-  const _gcd = (x, y) => (!y ? x : gcd(y, x % y));
-  return [...arr].reduce((a, b) => _gcd(a, b));
-};
-const lcm = (...arr) => {
-  const gcd = (x, y) => (!y ? x : gcd(y, x % y));
-  const _lcm = (x, y) => (x * y) / gcd(x, y);
-  return [...arr].reduce((a, b) => _lcm(a, b));
-};
+const dvdLogo = new Image();
 var img = getImg(294, 150);
 var dvd = getDvd();
 var screen = getScreen();
@@ -23,10 +15,9 @@ var startTime = performance.now();
 var maxpx = (lcm(max.x, max.y));
 var corner = nextCorner(logo);
 
+setScreen();
 wakeLock();
 animate();
-
-setScreen();
 
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState = 'visible') { reset() }
@@ -43,8 +34,8 @@ async function wakeLock() {
 
 function reCalc() { console.log("reCalc"); corner = nextCorner(logo) }
 function getGoodStart() {
-  let x = getRndInteger(0, window.innerWidth - 256 - 1),
-    y = getRndInteger(0, window.innerHeight - 147 - 1),
+  let x = getRndInteger(1, max.x - 1),
+    y = getRndInteger(1, max.y - 1),
     vx = oneOf2(1, -1),
     vy = oneOf2(1, -1),
     px = 0,
@@ -68,7 +59,6 @@ function getMax() {
 }
 
 function getImg(srcW, srcH) {
-
   let w = Math.round(Math.min(window.innerHeight, window.innerWidth) / 1000 * srcW),
     h = Math.round(Math.min(window.innerHeight, window.innerWidth) / 1000 * srcH);
   return { w, h }
@@ -85,7 +75,7 @@ function oneOf2(option0, option1) { if (Math.round(Math.random()) == 1) { return
 
 function getColor() {
   let h = colorH
-  while (h == colorH) { colorH = Math.floor(Math.random() * 36) * 10 } //360 total
+  while (h == colorH) { colorH = Math.floor(Math.random() * 6) * 60 } //360 total
   h = colorH
   s = 100 + '%'
   l = 50 + '%'
@@ -152,7 +142,6 @@ function animate() {
 function draw() {
   var canvas = document.getElementById("c");
   var context = canvas.getContext("2d");
-  const dvdLogo = new Image();
   dvdLogo.src = darkLight(dvd.black, dvd.white)
   context.clearRect(0, 0, screen.w, screen.h);
   context.fillStyle = darkLight("#000000", "#ffffff");
@@ -170,6 +159,7 @@ function fix() {
 }
 
 function reset() {
+  maxpx = (lcm(max.x, max.y));
   img = getImg(294, 150);
   max = getMax();
   screen = getScreen();
@@ -216,4 +206,12 @@ function padWithLeadingZeros(num, totalLength) {
   return String(num).padStart(totalLength, '0');
 }
 
-function willEverHit(x, y) { if (Math.abs(x - y) % gcd(max.x, max.y) == 0) { return true } else { return false } }
+function gcd(...arr) {
+  const _gcd = (x, y) => (!y ? x : gcd(y, x % y));
+  return [...arr].reduce((a, b) => _gcd(a, b));
+}
+function lcm(...arr) {
+  const gcd = (x, y) => (!y ? x : gcd(y, x % y));
+  const _lcm = (x, y) => (x * y) / gcd(x, y);
+  return [...arr].reduce((a, b) => _lcm(a, b));
+}
