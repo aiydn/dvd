@@ -43,7 +43,7 @@ function getGoodStart() {
   return { x, y, vx, vy, px, hit };
 }
 function getSpeed(s) {
-  let temp = Math.round(Math.max(window.innerHeight, window.innerWidth) / 1000 * s)
+  let temp = Math.round(Math.min(window.innerHeight, window.innerWidth) / 1000 * s)
   if (temp == 0) { return 1 }
   else { return temp }
 }
