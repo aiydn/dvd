@@ -15,9 +15,9 @@ var startTime = performance.now();
 var maxpx = (lcm(max.x, max.y));
 var corner = nextCorner(logo);
 
-setScreen();
 wakeLock();
 animate();
+setScreen();
 
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState = 'visible') { reset() }
@@ -43,7 +43,9 @@ function getGoodStart() {
   return { x, y, vx, vy, px, hit };
 }
 function getSpeed(s) {
-  return Math.round(Math.min(window.innerHeight, window.innerWidth) / 1000 * s)
+  let temp = Math.round(Math.max(window.innerHeight, window.innerWidth) / 1000 * s)
+  if (temp == 0) { return 1 }
+  else { return temp }
 }
 
 function getScreen() {
@@ -126,7 +128,7 @@ function whichCorner(x, y) {
 
 function animate() {
   requestAnimationFrame(animate)
-  for (var i = 0; i < speed; i++) {
+  for (let i = 0; i < speed; i++) {
     logo.x += logo.vx;
     logo.y += logo.vy;
     if (check(logo.x, "x")) { logo.vx = -logo.vx; logoColor = getColor(); recentHit = false };
