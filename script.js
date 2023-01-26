@@ -1,4 +1,4 @@
-window.onresize = function () {reset()}
+window.onresize = function () { if (bar == document.getElementById('bar').clientHeight) {reset()} else {bar = document.getElementById('bar').clientHeight} }
 var calc
 var bar = document.getElementById('bar').clientHeight
 const dvdLogo = new Image();
@@ -163,8 +163,8 @@ function reset() {
   if (screen !== newscreen){
   maxpx = (lcm(max.x, max.y));
   img = getImg(294, 150);
-  max = getMax();
   screen = getScreen();
+  max = getMax();
   speed = getSpeed(2)
   setScreen();
   fix();
