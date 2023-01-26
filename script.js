@@ -1,4 +1,4 @@
-window.onresize = function () { if (bar == document.getElementById('bar').clientHeight) {reset()} else {bar = document.getElementById('bar').clientHeight} }
+window.onresize = function () {reset()}
 var calc
 var bar = document.getElementById('bar').clientHeight
 const dvdLogo = new Image();
