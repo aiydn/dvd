@@ -49,12 +49,14 @@ function getSpeed(s) {
 }
 
 function getScreen() {
-    return { w: window.innerWidth, h: window.innerHeight - document.getElementById('bar').clientHeight}
+  let w = window.innerWidth,
+  h = window.innerHeight - document.getElementById('bar').clientHeight;
+  return {w, h}
 }
 
 function getMax() {
-  let x = screen.w - img.w,
-    y = screen.h - img.h;
+  let x =  window.innerWidth - img.w,
+    y = window.innerHeight - document.getElementById('bar').clientHeight - img.h;
   return { x, y }
 }
 
@@ -159,12 +161,10 @@ function fix() {
 }
 
 function reset() {
-  let newscreen = getScreen()
-  if (screen !== newscreen){
-  maxpx = (lcm(max.x, max.y));
   img = getImg(294, 150);
   screen = getScreen();
   max = getMax();
+  maxpx = (lcm(max.x, max.y));
   speed = getSpeed(2)
   setScreen();
   fix();
@@ -175,7 +175,6 @@ function reset() {
     reCalc();
   }, 1000);
   console.log("RESET");
-}
 }
 
 function setScreen() {
@@ -197,11 +196,6 @@ function chromiumOrElse(chromium, orElse) {
   let chrome = !!window.chrome;
   if (chrome) { return chromium }
   else { return orElse }
-}
-
-function turbo() {
-  if (corner.px - logo.px < 1000) { reset() }
-  else { speed = 300; requestAnimationFrame(turbo) }
 }
 
 function padWithLeadingZeros(num, totalLength) {
