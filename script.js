@@ -1,12 +1,13 @@
-window.onresize = function () { reset(); }
+console.log(navigator.windowControlsOverlay.visible)
+window.onresize = function () { if (bar == document.getElementById('bar').clientHeight) {reset()} else {bar = document.getElementById('bar').clientHeight} }
 var calc
+var bar = document.getElementById('bar').clientHeight
 const dvdLogo = new Image();
 var img = getImg(294, 150);
 var dvd = getDvd();
 var screen = getScreen();
 var max = getMax();
 var logo = getGoodStart();
-var screen = getScreen();
 var colorH = 0;
 var logoColor = getColor();
 var recentHit = false;
@@ -49,14 +50,12 @@ function getSpeed(s) {
 }
 
 function getScreen() {
-  let w = window.innerWidth,
-    h = window.innerHeight;
-  return { w, h };
+    return { w: window.innerWidth, h: window.innerHeight - document.getElementById('bar').clientHeight}
 }
 
 function getMax() {
-  let x = window.innerWidth - img.w,
-    y = window.innerHeight - img.h;
+  let x = screen.w - img.w,
+    y = screen.h - img.h;
   return { x, y }
 }
 
@@ -67,8 +66,8 @@ function getImg(srcW, srcH) {
 }
 
 function getDvd() {
-  let black = chromiumOrElse("/images/dvd_black.svg", "/images/dvd_black.png");
-  let white = chromiumOrElse("/images/dvd_white.svg", "/images/dvd_white.png");
+  let black = chromiumOrElse("/dvd/dvd_black.svg", "/dvd/dvd_black.png");
+  let white = chromiumOrElse("/dvd/dvd_white.svg", "/dvd/dvd_white.png");
   return { black, white }
 }
 
@@ -161,6 +160,8 @@ function fix() {
 }
 
 function reset() {
+  let newscreen = getScreen()
+  if (screen !== newscreen){
   maxpx = (lcm(max.x, max.y));
   img = getImg(294, 150);
   max = getMax();
@@ -175,6 +176,7 @@ function reset() {
     reCalc();
   }, 1000);
   console.log("RESET");
+}
 }
 
 function setScreen() {
@@ -192,7 +194,6 @@ function stats() {
   else if (corner.hit == false) { output = "The corner will never be hit" }
   if (output !== document.getElementById("stats").innerText) { document.getElementById("stats").innerText = output }
 }
-
 function chromiumOrElse(chromium, orElse) {
   let chrome = !!window.chrome;
   if (chrome) { return chromium }
