@@ -1,4 +1,3 @@
-console.log(navigator.windowControlsOverlay.visible)
 window.onresize = function () { if (bar == document.getElementById('bar').clientHeight) {reset()} else {bar = document.getElementById('bar').clientHeight} }
 var calc
 var bar = document.getElementById('bar').clientHeight
