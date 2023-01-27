@@ -117,7 +117,7 @@ function nextWall(x, y, vx, vy, px, hit) {
 
 function check(xy, maxXY) { if (max[maxXY] - (Math.abs(xy * 2 - max[maxXY])) == 0) { return true } }
 
-function darkLight(dark, light) { if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) { return dark } else { return dark } }
+function darkLight(dark, light) { if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) { return dark } else { return light } }
 
 function whichCorner(x, y) {
   if (x == 0 && y == 0) { return 'top left'; }
