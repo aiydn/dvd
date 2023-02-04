@@ -14,7 +14,7 @@ async function wakeLock() {
 
 function setDvdLogo() {
   dvdLogo = new Image()
-  dvdLogo.src = darkLight(dvd.black, dvd.white)
+  dvdLogo.src = chromiumOrElse("/dvd/dvd_black.svg", "/dvd/dvd_black.png")
 }
 
 function getGoodStart() {
@@ -44,12 +44,6 @@ function getSpeed() {
 function img(i) {
   if (i == 'w') { return Math.round(Math.min(document.documentElement.clientHeight, document.documentElement.clientWidth) / 1000 * 294) }
   if (i == 'h') { return Math.round(Math.min(document.documentElement.clientHeight, document.documentElement.clientWidth) / 1000 * 150) }
-}
-
-function getDvd() {
-  let black = chromiumOrElse("/dvd/dvd_black.svg", "/dvd/dvd_black.png");
-  let white = chromiumOrElse("/dvd/dvd_white.svg", "/dvd/dvd_white.png");
-  return { black, white }
 }
 
 function getRndInteger(min, max) {
@@ -160,7 +154,6 @@ function setup() {
 }
 
 function start() {
-  dvd = getDvd();
   setDvdLogo();
   logo = getGoodStart();
   colorH = 0;
@@ -187,7 +180,7 @@ function draw() {
   var canvas = document.getElementById("c");
   var context = canvas.getContext("2d");
   context.clearRect(0, 0, document.documentElement.clientWidth, document.documentElement.clientHeight);
-  context.fillStyle = darkLight("#000000", "#ffffff");
+  context.fillStyle = "#00000000";
   context.fillRect(0, 0, document.documentElement.clientWidth, document.documentElement.clientHeight);
   context.fillStyle = logoColor;
   context.fillRect(logo.x, logo.y, img('w'), img('h'));

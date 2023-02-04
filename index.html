@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="dark:bg-black" lang="en">
+<html class="bg-black" lang="en">
 
 <head>
   <title>DVD</title>
@@ -7,8 +7,7 @@
   <meta name="author" content="Aidan">
   <meta name="description" content="This DVD screensaver will show you the remaining time until the corner will be hit">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#262626" media="(prefers-color-scheme: dark)">
-  <meta name="theme-color" content="#e5e5e5" />
+  <meta name="theme-color" content="#262626">
   <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
   <link href="./build.css" rel="stylesheet">
   <script>navigator.serviceWorker.register("service-worker.js")</script>
@@ -17,10 +16,8 @@
 </head>
 
 <body>
-  <div id="bar" class="z-10 fixed flex justify-start titlebar bg-neutral-200 dark:bg-neutral-800">
-    <p id="stats" class="font-mono z-10 dark:text-white my-auto	ml-2">
-    </p>
-  </div>
+  <p id="stats" class="font-mono z-10 text-white mt-2	text-center">
+  </p>
   <canvas class="absolute bottom-0" id="c"> </canvas>
   <script src="script.js"></script>
 </body>
