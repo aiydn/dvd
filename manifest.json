@@ -1,11 +1,8 @@
 {
-    "display_override": [
-        "window-controls-overlay"
-    ],
     "name": "DVD screensaver",
     "short_name": "DVD",
     "start_url": "/index.html",
-    "display": "fullscreen",
+    "display": "standalone",
     "description": "This DVD screensaver will show you the remaining time until the corner will be hit",
     "lang": "eng",
     "dir": "auto",

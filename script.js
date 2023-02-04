@@ -1,27 +1,7 @@
-window.onresize = function () { if (bar == document.getElementById('bar').clientHeight) {reset()} else {bar = document.getElementById('bar').clientHeight} }
-var calc
-var bar = document.getElementById('bar').clientHeight
-const dvdLogo = new Image();
-var img = getImg(294, 150);
-var dvd = getDvd();
-var screen = getScreen();
-var max = getMax();
-var logo = getGoodStart();
-var colorH = 0;
-var logoColor = getColor();
-var recentHit = false;
-var speed = getSpeed(2);
-var startTime = performance.now();
-var maxpx = (lcm(max.x, max.y));
-var corner = nextCorner(logo);
-
 wakeLock();
-animate();
-setScreen();
-
-document.addEventListener("visibilitychange", () => {
-  if (document.visibilityState = 'visible') { reset() }
-})
+setup();
+start();
+loop();
 
 async function wakeLock() {
   try {
@@ -32,38 +12,38 @@ async function wakeLock() {
   }
 }
 
-function reCalc() { console.log("reCalc"); corner = nextCorner(logo) }
+function setDvdLogo() {
+  dvdLogo = new Image()
+  dvdLogo.src = darkLight(dvd.black, dvd.white)
+}
+
 function getGoodStart() {
-  let x = getRndInteger(1, max.x - 1),
-    y = getRndInteger(1, max.y - 1),
+  let x = getRndInteger(1, max('x') - 1),
+    y = getRndInteger(1, max('y') - 1),
     vx = oneOf2(1, -1),
     vy = oneOf2(1, -1),
     px = 0,
     hit = false;
   return { x, y, vx, vy, px, hit };
 }
-function getSpeed(s) {
-  let temp = Math.round(Math.min(window.innerHeight, window.innerWidth) / 1000 * s)
+
+function getZeroStart() {
+  let x = y = 0,
+    vx = vy = 1,
+    px = 0,
+    hit = false;
+  return { x, y, vx, vy, px, hit };
+}
+
+function getSpeed() {
+  let temp = Math.round((document.documentElement.clientHeight + document.documentElement.clientWidth) / 1000);
   if (temp == 0) { return 1 }
   else { return temp }
 }
 
-function getScreen() {
-  let w = window.innerWidth,
-  h = window.innerHeight - document.getElementById('bar').clientHeight;
-  return {w, h}
-}
-
-function getMax() {
-  let x =  window.innerWidth - img.w,
-    y = window.innerHeight - document.getElementById('bar').clientHeight - img.h;
-  return { x, y }
-}
-
-function getImg(srcW, srcH) {
-  let w = Math.round(Math.min(window.innerHeight, window.innerWidth) / 1000 * srcW),
-    h = Math.round(Math.min(window.innerHeight, window.innerWidth) / 1000 * srcH);
-  return { w, h }
+function img(i) {
+  if (i == 'w') { return Math.round(Math.min(document.documentElement.clientHeight, document.documentElement.clientWidth) / 1000 * 294) }
+  if (i == 'h') { return Math.round(Math.min(document.documentElement.clientHeight, document.documentElement.clientWidth) / 1000 * 150) }
 }
 
 function getDvd() {
@@ -72,8 +52,12 @@ function getDvd() {
   return { black, white }
 }
 
-function getRndInteger(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min }
-function oneOf2(option0, option1) { if (Math.round(Math.random()) == 1) { return option0 } else { return option1 } }
+function getRndInteger(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}
+function oneOf2(option0, option1) {
+  if (Math.round(Math.random()) == 1) { return option0 } else { return option1 }
+}
 
 function getColor() {
   let h = colorH
@@ -91,20 +75,30 @@ function time(px) {
 }
 
 function nextCorner(future) {
-  for (let run = 0; run < maxpx; run++) {
+  let maxRun = cornerToNextCorner().hits + 10;
+  let wall = 0;
+  for (let run = 0; run <= maxRun; run++) {
     future = nextWall(future.x, future.y, future.vx, future.vy, future.px, future.hit);
-    if (future.hit == true) { return { hit: future.hit, corner: whichCorner(future.x, future.y), px: future.px }; }
+    wall++;
+    if (future.hit == true) { return { hit: future.hit, corner: whichCorner(future.x, future.y), px: future.px, hits: wall }; }
   }
-  return { hit: future.hit, corner: whichCorner(future.x, future.y), px: future.px };
+  return { hit: future.hit, corner: whichCorner(future.x, future.y), px: future.px, hits: wall };
+}
+
+function cornerToNextCorner() {
+  let px = (max('x') * max('y')) / 2
+  let hits = Math.ceil((max('x') + max('y')) / 2)
+  return { px: px, hits: hits }
+
 }
 
 function nextWall(x, y, vx, vy, px, hit) {
   let oldVX = vx;
   let oldVY = vy;
   var distancex, distancey, plus
-  if (oldVX == 1) { distancex = max.x - x; } //right
+  if (vx == 1) { distancex = max('x') - x; } //right
   else { distancex = x; }; //left
-  if (oldVY == 1) { distancey = max.y - y; } //down
+  if (vy == 1) { distancey = max('y') - y; } //down
   else { distancey = y; }; //top
   if (distancex > distancey) { vy = -1 * oldVY; plus = Math.abs(distancey); }
   else if (distancey > distancex) { vx = -1 * oldVX; plus = Math.abs(distancex); }
@@ -115,83 +109,34 @@ function nextWall(x, y, vx, vy, px, hit) {
   return { x, y, vx, vy, px, hit }
 }
 
-function check(xy, maxXY) { if (max[maxXY] - (Math.abs(xy * 2 - max[maxXY])) == 0) { return true } }
+function wall(xy, maxXY) {
+  if (max(maxXY) - (Math.abs(xy * 2 - max(maxXY))) == 0) { return true }
+}
 
-function darkLight(dark, light) { if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) { return dark } else { return light } }
+function darkLight(dark, light) {
+  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) { return dark } else { return light }
+}
 
 function whichCorner(x, y) {
   if (x == 0 && y == 0) { return 'top left'; }
-  else if (x == 0 && y == max.y) { return 'lower left'; }
-  else if (x == max.x && y == 0) { return 'top right'; }
-  else if (x == max.x && y == max.y) { return 'lower right'; }
-}
-
-function animate() {
-  requestAnimationFrame(animate)
-  for (let i = 0; i < speed; i++) {
-    logo.x += logo.vx;
-    logo.y += logo.vy;
-    if (check(logo.x, "x")) { logo.vx = -logo.vx; logoColor = getColor(); recentHit = false };
-    if (check(logo.y, "y")) { logo.vy = -logo.vy; logoColor = getColor(); recentHit = false };
-    if (recentHit) { logoColor = getColor() };
-    logo.px += 1;
-    if (whichCorner(logo.x, logo.y) !== undefined) { recentHit = true; reset() };
-    stats();
-  }
-  draw()
-}
-
-function draw() {
-  var canvas = document.getElementById("c");
-  var context = canvas.getContext("2d");
-  dvdLogo.src = darkLight(dvd.black, dvd.white)
-  context.clearRect(0, 0, screen.w, screen.h);
-  context.fillStyle = darkLight("#000000", "#ffffff");
-  context.fillRect(0, 0, screen.w, screen.h);
-  context.fillStyle = logoColor;
-  context.fillRect(logo.x, logo.y, img.w, img.h);
-  context.drawImage(dvdLogo, logo.x + img.w * 0.05, logo.y + img.h * 0.05, img.w * 0.9, img.h * 0.9);
+  else if (x == 0 && y == max('y')) { return 'lower left'; }
+  else if (x == max('x') && y == 0) { return 'top right'; }
+  else if (x == max('x') && y == max('y')) { return 'lower right'; }
 }
 
 function fix() {
-  if (logo.x > max.x) { logo.x = max.x; logo.vx = -1 }
-  if (logo.y > max.y) { logo.y = max.y; logo.vy = -1 }
+  if (logo.x > max('x')) { logo.x = max('x'); logo.vx = -1 }
+  if (logo.y > max('y')) { logo.y = max('y'); logo.vy = -1 }
   if (logo.x < 0) { logo.x = 0; logo.vx = 1 }
   if (logo.y < 0) { logo.y = 0; logo.vy = 1 }
 }
 
-function reset() {
-  img = getImg(294, 150);
-  screen = getScreen();
-  max = getMax();
-  maxpx = (lcm(max.x, max.y));
-  speed = getSpeed(2)
-  setScreen();
-  fix();
-  startTime = performance.now();
-  logo.px = 0;
-  clearTimeout(calc);
-  calc = setTimeout(function () {
-    reCalc();
-  }, 1000);
-  console.log("RESET");
-}
-
 function setScreen() {
   var ctx = document.getElementById("c").getContext("2d");
-  ctx.canvas.width = screen.w;
-  ctx.canvas.height = screen.h;
+  if (ctx.canvas.width !== document.documentElement.clientWidth) ctx.canvas.width = document.documentElement.clientWidth;
+  if (ctx.canvas.height !== document.documentElement.clientHeight) ctx.canvas.height = document.documentElement.clientHeight;
 }
 
-function stats() {
-  let output
-  if (corner.hit == true) {
-    let countdown = time(corner.px - logo.px);
-    output = "It will take " + countdown.H + " hour " + countdown.M + " minutes " + countdown.S + " seconds until the " + corner.corner + " corner will be hit"
-  }
-  else if (corner.hit == false) { output = "The corner will never be hit" }
-  if (output !== document.getElementById("stats").innerText) { document.getElementById("stats").innerText = output }
-}
 function chromiumOrElse(chromium, orElse) {
   let chrome = !!window.chrome;
   if (chrome) { return chromium }
@@ -202,12 +147,73 @@ function padWithLeadingZeros(num, totalLength) {
   return String(num).padStart(totalLength, '0');
 }
 
-function gcd(...arr) {
-  const _gcd = (x, y) => (!y ? x : gcd(y, x % y));
-  return [...arr].reduce((a, b) => _gcd(a, b));
+function loop() {
+  animate();
+  setScreen();
+  fix();
+  stats();
+  requestAnimationFrame(loop)
 }
-function lcm(...arr) {
-  const gcd = (x, y) => (!y ? x : gcd(y, x % y));
-  const _lcm = (x, y) => (x * y) / gcd(x, y);
-  return [...arr].reduce((a, b) => _lcm(a, b));
+
+function setup() {
+  var dvd, img, dvd, screen, logo, colorH, logoColor, speed, startTime, beforePause, corner;
+}
+
+function start() {
+  dvd = getDvd();
+  setDvdLogo();
+  logo = getGoodStart();
+  colorH = 0;
+  logoColor = getColor();
+  logo.hit = false;
+  speed = getSpeed(2);
+  startTime = performance.now();
+}
+
+function animate() {
+  for (let i = 0; i < speed; i++) {
+    logo.x += logo.vx;
+    logo.y += logo.vy;
+    if (wall(logo.x, "x")) { logo.vx = -logo.vx; logoColor = getColor(); logo.hit = false };
+    if (wall(logo.y, "y")) { logo.vy = -logo.vy; logoColor = getColor(); logo.hit = false };
+    if (logo.hit) { logoColor = getColor() };
+    logo.px += 1;
+    if (whichCorner(logo.x, logo.y) !== undefined) { logo.hit = true; };
+    draw();
+  }
+}
+
+function draw() {
+  var canvas = document.getElementById("c");
+  var context = canvas.getContext("2d");
+  context.clearRect(0, 0, document.documentElement.clientWidth, document.documentElement.clientHeight);
+  context.fillStyle = darkLight("#000000", "#ffffff");
+  context.fillRect(0, 0, document.documentElement.clientWidth, document.documentElement.clientHeight);
+  context.fillStyle = logoColor;
+  context.fillRect(logo.x, logo.y, img('w'), img('h'));
+  context.drawImage(dvdLogo, logo.x + img('w') * 0.05, logo.y + img('h') * 0.05, img('w') * 0.9, img('h') * 0.9);
+}
+
+function max(i) {
+  if (i == 'x') { return document.documentElement.clientWidth - img('w') }
+  if (i == 'y') { return document.documentElement.clientHeight - img('h') }
+}
+
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === 'visible') {
+    startTime += performance.now() - beforePause; //play
+  } else {
+    beforePause = performance.now(); //pause
+  }
+})
+
+function stats() {
+  let output
+  let next = nextCorner(logo);
+  if (next.hit == true) {
+    let countdown = time(next.px - logo.px);
+    output = `It will take ${countdown.H} hour ${countdown.M} minutes ${countdown.S} seconds until the ${next.corner} corner will be hit`
+  }
+  else if (next.hit == false) { output = `The corner will never be hit`; }
+  if (output !== document.getElementById("stats").innerText) { document.getElementById("stats").innerText = output; }
 }
