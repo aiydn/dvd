@@ -76,14 +76,13 @@ function nextCorner(future) {
     wall++;
     if (future.hit == true) { return { hit: future.hit, corner: whichCorner(future.x, future.y), px: future.px, hits: wall }; }
   }
-  return { hit: future.hit, corner: whichCorner(future.x, future.y), px: future.px, hits: wall };
+  return { hit: future.hit};
 }
 
 function cornerToNextCorner() {
-  let px = (max('x') * max('y')) / 2
-  let hits = Math.ceil((max('x') + max('y')) / 2)
+  let px = (max('x') * max('y'))
+  let hits = (max('x') + max('y'))
   return { px: px, hits: hits }
-
 }
 
 function nextWall(x, y, vx, vy, px, hit) {
